@@ -16,6 +16,14 @@ public class Settings {
         this.fleet = new HashMap<>();
   
     }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+    
+    public Map<Integer,Integer> getFleet() {
+        return fleet;
+    }
     
     public void addShipType(int length, int count) {
         if (length < 2 || length > 5) return;
