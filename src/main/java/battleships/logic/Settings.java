@@ -4,15 +4,19 @@ package battleships.logic;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Settings class stores and modifies game settings.
+ * 
+ * @author Janne
+ */
 public class Settings {
     
     private int gridSize;
     private Map<Integer,Integer> fleet;
     
     
-    public Settings() {
-        gridSize = 10;
+    public Settings(int gridSize) {
+        this.gridSize = gridSize;
         this.fleet = new HashMap<>();
   
     }

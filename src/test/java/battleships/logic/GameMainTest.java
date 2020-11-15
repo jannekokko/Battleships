@@ -16,6 +16,7 @@ public class GameMainTest {
     @Before
     public void setUp() {
         gm = new GameMain();
+        gm.initGame();
     }
 
 

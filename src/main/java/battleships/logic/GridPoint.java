@@ -1,7 +1,11 @@
 
 package battleships.logic;
 
-
+/**
+ * Class for storing and modifying single Grid Point's data.
+ * 
+ * @author Janne
+ */
 public class GridPoint {
     
     private GridState state;
