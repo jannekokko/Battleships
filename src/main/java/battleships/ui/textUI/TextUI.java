@@ -1,6 +1,6 @@
 
 
-package battleships.ui;
+package battleships.ui.textUI;
 
 import battleships.logic.*;
 import java.util.ArrayList;

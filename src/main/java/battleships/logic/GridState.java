@@ -8,6 +8,9 @@ package battleships.logic;
  */
 public enum GridState {
     
-    UNKNOWN, MISS, HIT, SUNK
+    UNKNOWN,
+    MISS,
+    HIT,
+    SUNK
     
 }

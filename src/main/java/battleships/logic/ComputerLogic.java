@@ -12,6 +12,11 @@ import java.util.Random;
  * @author Janne
  */
 public class ComputerLogic {
+    private int maxCycles;
+    
+    public ComputerLogic() {
+        maxCycles = 10000;
+    }
     
     /**
      * Fills computer's Grid with Ships.
@@ -25,11 +30,10 @@ public class ComputerLogic {
         List<Integer> Ships = new ArrayList<>(fleet.keySet());
         Collections.sort(Ships, Collections.reverseOrder());
         int count = 0;
-        int maxCount = 10000;   // In case we end up with impossible arrangement
 
         for(int length: Ships) {
             int left = fleet.get(length);
-            while (left > 0 && count < maxCount) {
+            while (left > 0 && count < maxCycles) {
                 count++;
                 Direction dir = Direction.values()[r.nextInt(2)];
                 int x;
@@ -48,7 +52,7 @@ public class ComputerLogic {
                 
             }
             
-            if (count >= maxCount) {
+            if (count >= maxCycles) {
                 grid.clearGrid();
                 fillGrid(grid,settings);
             }
@@ -56,10 +60,12 @@ public class ComputerLogic {
     }
     
     /**
-     * Shoots at random location of enemy grid
+     * Shoots at random location of enemy grid. This is a backup mechanism
+     * where we should not end up usually.
      * @param grid  Enemy's grid object
+     * @return Result of the shot
      */
-    public GridState shoot(Grid grid) {
+    private GridState shootRandom(Grid grid) {
         Random r = new Random();
         int size = grid.getSize();
         
@@ -78,10 +84,118 @@ public class ComputerLogic {
             }
         }
         if (state == GridState.UNKNOWN) {
-            state = shoot(grid);
+            state = shootRandom(grid);
         }
         return state;
     }
     
+    /**
+     * Attempts to shoot smartly by looking if there are ships that have been
+     * hit but not sunk yet and makes firing decision based on that.
+     * @param grid Grid object of the target
+     * @return Result of the shot
+     */
+    private GridState shootSmart(Grid grid) {
+        ArrayList<Integer> xHits = new ArrayList<>();
+        ArrayList<Integer> yHits = new ArrayList<>();
+        int size = grid.getSize();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (grid.getGridState(x, y) == GridState.HIT) {
+                    xHits.add(x);
+                    yHits.add(y);
+                }
+            }
+        }
+        Collections.sort(xHits);
+        Collections.sort(yHits);
+
+        
+        GridState state = GridState.UNKNOWN;
+        if (xHits.size() > 1) {
+            if (yHits.get(0) == yHits.get(yHits.size()-1)) {
+                state = shootSubGrid(grid,xHits.get(0)-1,xHits.get(xHits.size()-1)+1,yHits.get(0),yHits.get(0));
+            } else {
+                state = shootSubGrid(grid,xHits.get(0),xHits.get(0),yHits.get(0)-1,yHits.get(yHits.size()-1)+1);
+            }
+        } else if (xHits.size() == 1) {
+            state = shootSubGrid(grid,xHits.get(0)-1,xHits.get(0)+1,yHits.get(0)-1,yHits.get(0)+1);
+        }
+        if (state == GridState.UNKNOWN) state = shootSubGrid(grid,0,size-1,0,size-1);
+        return state;
+    }
+    
+    /**
+     * Attempts to shoot at subgrid of grid.
+     * @param grid Grid object where to shoot
+     * @param x0 Lower limit of x-coordinate
+     * @param x1 Upper limit of x-coordinate
+     * @param y0 Lower limit of y-coordinate
+     * @param y1 Upper limit of y-coordinate
+     * @return Result of the shot
+     */
+    private GridState shootSubGrid(Grid grid, int x0, int x1, int y0, int y1) {
+        if (x0 < 0) x0 = 0;
+        if (y0 < 0) y0 = 0;
+        if (x1 >= grid.getSize()) x1 = grid.getSize()-1;
+        if (y1 >= grid.getSize()) y1 = grid.getSize()-1;
+//        System.out.println("shootsmart x " +x0 +  " " + x1 + " y " + y0 + " " + y1);
+        GridState state = GridState.UNKNOWN;
+        Random r = new Random();
+        boolean hitPossible = false;
+        int x = x0;
+        int y = y0;
+        int cycles = 0;
+        while (cycles < maxCycles && !hitPossible) {
+            if (x0 < x1) x = r.nextInt(x1 - x0 + 1) + x0;
+            if (y0 < y1) y = r.nextInt(y1 - y0 + 1) + y0;
+            cycles++;
+            hitPossible = hitPossible(grid, x, y);
+        }
+        if (hitPossible) state = grid.shootAt(x, y);
+        
+        return state;
+    }
+    
+    
+    /**
+     * Checks if shooting at x,y makes sense based on neighboring grid points.
+     * @param grid Grid object of the target
+     * @param x x-coordinate of the target
+     * @param y y-coordinate of the target
+     * @return True if shooting at x,y makes sense, false otherwise
+     */
+    private boolean hitPossible(Grid grid, int x, int y) {
+//        System.out.println("hitpossible x " + x + " y " + y);
+        if (grid.getGridState(x, y) != GridState.UNKNOWN) return false;
+        if (grid.getGridState(x-1, y) == GridState.SUNK) return false;
+        if (grid.getGridState(x+1, y) == GridState.SUNK) return false;
+        if (grid.getGridState(x, y-1) == GridState.SUNK) return false;
+        if (grid.getGridState(x, y+1) == GridState.SUNK) return false;
+        if (grid.getGridState(x-1, y-1) == GridState.HIT || grid.getGridState(x-1, y-1) == GridState.SUNK)
+            return false;
+        if (grid.getGridState(x+1, y-1) == GridState.HIT || grid.getGridState(x+1, y-1) == GridState.SUNK)
+            return false;
+        if (grid.getGridState(x-1, y+1) == GridState.HIT || grid.getGridState(x-1, y+1) == GridState.SUNK)
+            return false;
+        if (grid.getGridState(x+1, y+1) == GridState.HIT || grid.getGridState(x+1, y+1) == GridState.SUNK)
+            return false;
+        
+        return true;
+    }
+    
+    /**
+     * Tells computer to shoot. At first a smart shot is attempted. If that is
+     * unsuccessful, shoots at random coordinates
+     * @param grid Grid object of the target
+     * @return Result of the shot
+     */
+    public GridState shoot(Grid grid) {
+        GridState state = GridState.UNKNOWN;
+        
+        state = shootSmart(grid);
+        if (state == GridState.UNKNOWN) state = shootRandom(grid);
+        return state;
+    }
     
 }

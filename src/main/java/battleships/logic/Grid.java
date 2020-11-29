@@ -150,7 +150,12 @@ public class Grid {
     }
     
     public GridState getGridState(int x, int y) {
+        if (x < 0 || x >= size || y < 0 || y >= size) return GridState.UNKNOWN;
         return gridMap[x][y].getState();
+    }
+    
+    public Ship getShip(int x, int y) {
+        return gridMap[x][y].getShip();
     }
 
     public int getSize() {

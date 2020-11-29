@@ -29,6 +29,11 @@ public class Settings {
         return fleet;
     }
     
+    /**
+     * Adds new ship length and count to fleet.
+     * @param length ship length
+     * @param count count of ships of this type
+     */
     public void addShipType(int length, int count) {
         if (length < 2 || length > 5) return;
         if (count < 1) return;
