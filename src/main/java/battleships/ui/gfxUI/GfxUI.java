@@ -1,6 +1,7 @@
 package battleships.ui.gfxUI;
 
 import battleships.logic.*;
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -25,6 +26,7 @@ public class GfxUI extends Application {
     public void start(Stage stage) {
         stage.setTitle("Battleships");
         this.gameMain = new GameMain();
+
         SceneControl control = new SceneControl(stage, gameMain);
         control.start();
     }

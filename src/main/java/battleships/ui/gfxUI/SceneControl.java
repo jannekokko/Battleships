@@ -39,6 +39,7 @@ public class SceneControl {
         MainMenu mainMenu = new MainMenu(gameMain, uiData);
         PlacementView placementView = new PlacementView(gameMain, uiData);       
         GameView gameView = new GameView(gameMain, uiData, topView);
+        StatisticsView statisticsView = new StatisticsView(gameMain, uiData, topView);
         
         Label topLabel = new Label("Battleships");
         topLabel.setFont(Font.font("Arial",30));
@@ -61,6 +62,9 @@ public class SceneControl {
                  }
                  if (uiData.getView() == Views.GAMEVIEW.ordinal()) {
                      root.setCenter(gameView.getView());
+                 }
+                 if (uiData.getView() == Views.STATISTICSVIEW.ordinal()) {
+                     root.setCenter(statisticsView.getView());
                  }
             }
         });

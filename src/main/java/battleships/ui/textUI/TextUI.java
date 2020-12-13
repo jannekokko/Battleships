@@ -25,7 +25,7 @@ public class TextUI {
     }
     
     
-    public static void main(String[] args) {  
+    public static void main(String[] args) throws Exception {  
         GameMain gameMain = new GameMain();
         Scanner reader = new Scanner(System.in);
 
@@ -174,13 +174,14 @@ public class TextUI {
             System.out.println("You: " + playerTargetState.toString());
             System.out.println("Enemy: " + computerTargetState.toString() + "\n");
             
-            if(gameMain.getPlayerGrid().shipsLeft() <= 0 && gameMain.getComputerGrid().shipsLeft() <= 0) {
+            Result result = gameMain.checkResult();
+            if(result == Result.DRAW) {
                 System.out.println("\n\nDRAW!");
                 break;
-            } else if(gameMain.getPlayerGrid().shipsLeft() <= 0) {
+            } else if(result == Result.COMPUTERWON) {
                 System.out.println("\n\nYOU LOST!");
                 break;
-            } else if(gameMain.getComputerGrid().shipsLeft() <= 0) {
+            } else if(result == Result.PLAYERWON) {
                 System.out.println("\n\nYOU WON!");
                 break;
             }

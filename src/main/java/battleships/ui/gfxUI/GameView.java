@@ -88,11 +88,12 @@ public class GameView implements ContainsView {
      * Checks if end condition of the game is met and shows result & return button if yes.
      */
     private void checkResult() {
-        if(gameMain.getPlayerGrid().shipsLeft() <= 0 && gameMain.getComputerGrid().shipsLeft() <= 0) {
+        Result result = gameMain.checkResult();
+        if(result == Result.DRAW) {
             topView.setLeft(new Label("IT'S A DRAW!"));
-        } else if(gameMain.getPlayerGrid().shipsLeft() <= 0) {
+        } else if(result == Result.COMPUTERWON) {
             topView.setLeft(new Label("YOU LOST!"));
-        } else if(gameMain.getComputerGrid().shipsLeft() <= 0) {
+        } else if(result == Result.PLAYERWON) {
             topView.setLeft(new Label("YOU WON!"));
         } else return;
         gameInProgress = false;

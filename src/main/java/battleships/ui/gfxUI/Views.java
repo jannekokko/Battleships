@@ -10,7 +10,8 @@ package battleships.ui.gfxUI;
 public enum Views {
     MAINMENU,
     PLACEMENTVIEW,
-    GAMEVIEW;
-
+    GAMEVIEW,
+    PLAYERSELECTIONVIEW,
+    STATISTICSVIEW
 
 }
