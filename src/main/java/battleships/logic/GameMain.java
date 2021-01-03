@@ -109,7 +109,7 @@ public class GameMain {
      * Sets default id of player and computer. For player it is the anonymous
      * account which cannot be removed from database.
      */
-    private void setDefaultIds() {
+    public void setDefaultIds() {
         List<PlayerData> playerList = playerDB.getPlayers();
         
         for (PlayerData pd: playerList) {
@@ -129,6 +129,11 @@ public class GameMain {
     public String getPlayerName() {
         if (playerName == null || playerName.isEmpty()) getPlayerNameFromDB();
         return playerName;
+    }
+    
+    public void setPlayerName(String name) {
+        playerName = name;
+        playerId = playerDB.getId(name);
     }
 
     public PlayerDatabase getPlayerDB() {

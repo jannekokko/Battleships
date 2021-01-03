@@ -31,15 +31,14 @@ public class MainMenu implements ContainsView {
     public Parent getView() {
         BorderPane menuPane = new BorderPane();
         
-        VBox buttonLayout = new VBox();
+        VBox buttonLayout = new VBox(20);
         buttonLayout.setAlignment(Pos.CENTER);
-        buttonLayout.setSpacing(20);
         
         menuPane.setCenter(buttonLayout);
         
         createButtons(buttonLayout);
         
-        return menuPane;
+        return (Parent) menuPane;
     }
     
     /**
@@ -48,15 +47,20 @@ public class MainMenu implements ContainsView {
      */
     public void createButtons(VBox buttonLayout) {
         Button startButton = new Button("Start game");
+        Button playerSelectionButton = new Button("Select player");
         Button statisticsButton = new Button("Statistics");
         Button quitButton = new Button("Quit game");
         
         buttonLayout.getChildren().add(startButton);
+        buttonLayout.getChildren().add(playerSelectionButton);
         buttonLayout.getChildren().add(statisticsButton);
         buttonLayout.getChildren().add(quitButton);
         
         startButton.setOnAction((event) -> {
             uiData.setView(Views.PLACEMENTVIEW);
+        });
+        playerSelectionButton.setOnAction((event) -> {
+            uiData.setView(Views.PLAYERSELECTIONVIEW);
         });
         statisticsButton.setOnAction((event) -> {
             uiData.setView(Views.STATISTICSVIEW);

@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * Main game view that shows both grids and handles game events.
@@ -89,13 +92,17 @@ public class GameView implements ContainsView {
      */
     private void checkResult() {
         Result result = gameMain.checkResult();
+        Label l = new Label();
         if(result == Result.DRAW) {
-            topView.setLeft(new Label("IT'S A DRAW!"));
+            l.setText("IT'S A DRAW!");
         } else if(result == Result.COMPUTERWON) {
-            topView.setLeft(new Label("YOU LOST!"));
+            l.setText("YOU LOST!");
         } else if(result == Result.PLAYERWON) {
-            topView.setLeft(new Label("YOU WON!"));
+            l.setText("YOU WON!");
         } else return;
+        l.setTextFill(Color.web("#ff0000"));
+        l.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        topView.setLeft(l);
         gameInProgress = false;
         Button b = new Button("Main menu");
         b.setOnAction((event) -> {

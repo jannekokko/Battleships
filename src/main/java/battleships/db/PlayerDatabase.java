@@ -51,7 +51,7 @@ public class PlayerDatabase {
      */
     public boolean addPlayer(String name) {
         try {
-            PreparedStatement p = db.prepareStatement("INSERT INTO Players (name) VALUES=(?)");
+            PreparedStatement p = db.prepareStatement("INSERT INTO Players (name) VALUES (?)");
             p.setString(1, name);
             p.executeUpdate();
         } catch (SQLException e) {
@@ -62,18 +62,34 @@ public class PlayerDatabase {
     
     /**
      * Attempts to delete a player.
-     * @param id id of the player
+     * @param name name of the player
      * @return true if successful, otherwise false
      */
-    public boolean deletePlayer(int id) {
+    public boolean deletePlayer(String name) {
         try {
-            PreparedStatement p = db.prepareStatement("DELETE FROM Players WHERE id=? AND irremovable=0");
-            p.setInt(1, id);
+            PreparedStatement p = db.prepareStatement("DELETE FROM Players WHERE name=? AND irremovable=0");
+            p.setString(1, name);
             p.executeUpdate();
         } catch (SQLException e) {
             return false;
         }
         return true;
+    }
+    
+    public boolean isDeletable(String name) {
+        try {
+            PreparedStatement p = db.prepareStatement("SELECT id FROM Players WHERE name=? AND irremovable=0");
+            p.setString(1, name);
+            ResultSet r = p.executeQuery();
+            if (!r.next()) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error reading database!");
+        }
+        return false;
     }
     
     /**
@@ -136,6 +152,23 @@ public class PlayerDatabase {
         return name;
     }
     
+    public int getId(String name) {
+        int id = -1;
+        try {
+            PreparedStatement p = db.prepareStatement("SELECT id FROM Players WHERE name=?");
+            p.setString(1, name);
+            ResultSet r = p.executeQuery();
+            if (!r.next()) {
+                System.out.println("No players in database!");
+            } else {
+                id = r.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error reading database!");
+        }
+        return id;
+    }
+    
     /**
      * Generates a list of all players in database and their statistics.
      * @return List of PlayerData objects.
@@ -159,5 +192,27 @@ public class PlayerDatabase {
             System.out.println("Error reading database!");
         }
         return players;
+    }
+    
+    public List<String> getNames() {
+        List<String> names = new ArrayList<>();
+        
+        try {
+            PreparedStatement p = db.prepareStatement("SELECT name FROM Players WHERE computer=0");
+            ResultSet r = p.executeQuery();
+            if (!r.next()) {
+                System.out.println("No players in database!");
+            } else {
+                boolean next = true;
+                while(next) {
+                    names.add(r.getString("name"));
+                    next = r.next();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error reading database!");
+        }
+        
+        return names;
     }
 }

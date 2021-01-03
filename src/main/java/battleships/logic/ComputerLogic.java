@@ -13,9 +13,13 @@ import java.util.Random;
  */
 public class ComputerLogic {
     private int maxCycles;
+    private int maxNeighborChecks;
+    private double randomShotChance;
     
     public ComputerLogic() {
-        maxCycles = 10000;
+        this.maxCycles = 10000;
+        this.maxNeighborChecks = 20;
+        this.randomShotChance = 0.05;
     }
     
     /**
@@ -47,7 +51,6 @@ public class ComputerLogic {
                 }
                 if(grid.add(x, y, dir, length)) {
                     left--;
-//                    System.out.println("x: " + x + " y: " + y + " dir: " + dir.toString() + " length: " + length);
                 }
                 
             }
@@ -86,6 +89,7 @@ public class ComputerLogic {
         if (state == GridState.UNKNOWN) {
             state = shootRandom(grid);
         }
+
         return state;
     }
     
@@ -110,7 +114,6 @@ public class ComputerLogic {
         Collections.sort(xHits);
         Collections.sort(yHits);
 
-        
         GridState state = GridState.UNKNOWN;
         if (xHits.size() > 1) {
             if (yHits.get(0) == yHits.get(yHits.size()-1)) {
@@ -121,7 +124,14 @@ public class ComputerLogic {
         } else if (xHits.size() == 1) {
             state = shootSubGrid(grid,xHits.get(0)-1,xHits.get(0)+1,yHits.get(0)-1,yHits.get(0)+1);
         }
-        if (state == GridState.UNKNOWN) state = shootSubGrid(grid,0,size-1,0,size-1);
+        
+        // If there are no ships that have been hit but not sunk, shoot either
+        // semismartly or randomly.
+        if (state == GridState.UNKNOWN) {
+            Random r = new Random();
+            if (r.nextDouble() < randomShotChance) state = shootRandom(grid);
+            else state = shootSubGrid(grid,0,size-1,0,size-1);
+        }
         return state;
     }
     
@@ -139,21 +149,27 @@ public class ComputerLogic {
         if (y0 < 0) y0 = 0;
         if (x1 >= grid.getSize()) x1 = grid.getSize()-1;
         if (y1 >= grid.getSize()) y1 = grid.getSize()-1;
-//        System.out.println("shootsmart x " +x0 +  " " + x1 + " y " + y0 + " " + y1);
         GridState state = GridState.UNKNOWN;
         Random r = new Random();
-        boolean hitPossible = false;
         int x = x0;
         int y = y0;
-        int cycles = 0;
-        while (cycles < maxCycles && !hitPossible) {
-            if (x0 < x1) x = r.nextInt(x1 - x0 + 1) + x0;
-            if (y0 < y1) y = r.nextInt(y1 - y0 + 1) + y0;
-            cycles++;
-            hitPossible = hitPossible(grid, x, y);
+        int neighborChecks = 0;
+        boolean noNeighborsShot = false;
+        boolean hitPossible = false;
+        while (neighborChecks < maxNeighborChecks && !noNeighborsShot) {
+            hitPossible = false;
+            int cycles = 0;
+            while (cycles < maxCycles && !hitPossible) {
+                if (x0 < x1) x = r.nextInt(x1 - x0 + 1) + x0;
+                if (y0 < y1) y = r.nextInt(y1 - y0 + 1) + y0;
+                cycles++;
+                hitPossible = hitPossible(grid, x, y);
+            }
+            if (hitPossible) noNeighborsShot = noNeighborsShot(grid, x, y); 
+
+            neighborChecks++;
         }
         if (hitPossible) state = grid.shootAt(x, y);
-        
         return state;
     }
     
@@ -166,7 +182,6 @@ public class ComputerLogic {
      * @return True if shooting at x,y makes sense, false otherwise
      */
     private boolean hitPossible(Grid grid, int x, int y) {
-//        System.out.println("hitpossible x " + x + " y " + y);
         if (grid.getGridState(x, y) != GridState.UNKNOWN) return false;
         if (grid.getGridState(x-1, y) == GridState.SUNK) return false;
         if (grid.getGridState(x+1, y) == GridState.SUNK) return false;
@@ -185,15 +200,29 @@ public class ComputerLogic {
     }
     
     /**
+     * Checks if grid points horizontally or vertically next to (x,y) have been shot at
+     * @param Grid object of the target
+     * @param x x-coordinate of the target
+     * @param y y-coordinate of the target
+     * @return True if neighborin points haven't been shot at, otherwise false
+     */
+    private boolean noNeighborsShot(Grid grid, int x, int y) {
+        if (grid.getGridState(x-1, y) != GridState.UNKNOWN) return false;
+        if (grid.getGridState(x+1, y) != GridState.UNKNOWN) return false;
+        if (grid.getGridState(x, y-1) != GridState.UNKNOWN) return false;
+        if (grid.getGridState(x, y+1) != GridState.UNKNOWN) return false;
+        
+        return true;
+    }
+    
+    /**
      * Tells computer to shoot. At first a smart shot is attempted. If that is
      * unsuccessful, shoots at random coordinates
      * @param grid Grid object of the target
      * @return Result of the shot
      */
     public GridState shoot(Grid grid) {
-        GridState state = GridState.UNKNOWN;
-        
-        state = shootSmart(grid);
+        GridState state = shootSmart(grid);
         if (state == GridState.UNKNOWN) state = shootRandom(grid);
         return state;
     }
