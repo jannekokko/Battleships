@@ -24,17 +24,17 @@ import javafx.scene.shape.Rectangle;
  * @author Janne
  */
 public class PlacementView implements ContainsView {
-    private GameMain gameMain;
-    private UIDataStore uiData;
+    private final GameMain gameMain;
+    private final UIDataStore uiData;
     private Parent nextShip;
     private Parent grid;
     private Pane leftSide;
-    private Map<Integer,Integer> fleet;
+    private final Map<Integer,Integer> fleet;
     private Grid playerGrid;
     private PriorityQueue<Integer> ships;
-    private int width;
-    private int height;
-    private int size;
+    private final int width;
+    private final int height;
+    private final int size;
     Direction dir = Direction.HORIZONTAL;
     
     public PlacementView(GameMain gameMain, UIDataStore uiData) {
@@ -63,7 +63,7 @@ public class PlacementView implements ContainsView {
         
         leftSide = new Pane();
         leftSide.setPrefWidth(uiData.getGridWidth());
-        BorderPane rightSide = getRightSide();
+        Parent rightSide = getRightSide();
 
         grid = new GridScenes(gameMain,uiData).getPlayerGrid();
         leftSide.getChildren().add(grid);
@@ -114,7 +114,7 @@ public class PlacementView implements ContainsView {
      * Generates right view that contains reset button and instructions.
      * @return Parent object of the right side view
      */
-    private BorderPane getRightSide() {
+    private Parent getRightSide() {
         BorderPane bp = new BorderPane();
         VBox rightSide = new VBox();
         rightSide.setPrefWidth(uiData.getGridWidth());
@@ -180,7 +180,6 @@ public class PlacementView implements ContainsView {
      */
     private int nextShipLength() {
         if (!ships.isEmpty()) {
-//            System.out.println("lenght " + ships.peek());
             return ships.peek();
         }
         return 0;

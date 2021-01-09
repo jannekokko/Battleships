@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class Settings {
     
-    private int gridSize;
-    private Map<Integer,Integer> fleet;
+    private final int gridSize;
+    private final Map<Integer,Integer> fleet;
     
     
     public Settings(int gridSize) {

@@ -22,7 +22,7 @@ public class ComputerLogicTest {
     
     @Before
     public void setUp() {
-        gm = new GameMain();
+        gm = new GameMain("test.db");
         gm.initGame();
     }
     

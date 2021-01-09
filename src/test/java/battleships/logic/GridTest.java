@@ -20,25 +20,25 @@ public class GridTest {
     
     @Before
     public void setUp() {
-        gm = new GameMain();
+        gm = new GameMain("test.db");
         gm.initGame();
     }
     
     @Test
-    public void testAddTrue() {
+    public void testAddShipSuccessful() {
         Grid g = gm.getPlayerGrid();
         assertTrue(g.add(0, 0, Direction.VERTICAL, 3));
     }
     
     @Test
-    public void testAddOverlap() {
+    public void testAddOverlappingShip() {
         Grid g = gm.getPlayerGrid();
         g.add(0, 0, Direction.HORIZONTAL, 4);
         assertFalse(g.add(1, 0, Direction.VERTICAL, 3));
     }
     
     @Test
-    public void testAddOutside() {
+    public void testAddOutsideTheGrid() {
         Grid g = gm.getPlayerGrid();
         int size = g.getSize();
         assertFalse(g.add(size+1, 0, Direction.VERTICAL, 2));

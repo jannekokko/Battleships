@@ -14,10 +14,10 @@ import javafx.stage.Stage;
  * @author Janne
  */
 public class SceneControl {
-    private Stage stage;
-    private GameMain gameMain;
-    private UIDataStore uiData;
-    private int topHeight;
+    private final Stage stage;
+    private final GameMain gameMain;
+    private final UIDataStore uiData;
+    private final int topHeight;
     
     public SceneControl(Stage stage, GameMain gameMain) {
         this.stage = stage;
@@ -27,7 +27,7 @@ public class SceneControl {
     }
     
     /**
-     * Initiates UI views and the game.
+     * Initiates UI views and the game. Also contains listeners for changing Views.
      */
     public void start() {
         stage.setResizable(false);

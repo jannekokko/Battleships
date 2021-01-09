@@ -2,7 +2,8 @@
 package battleships.logic;
 
 /**
- * Class for storing and modifying single Grid Point's data.
+ * Class for storing and modifying single Grid Point's data. Contains GridPoint's
+ * state and Ship if it is occupied. Only getter and setter methods.
  * 
  * @author Janne
  */

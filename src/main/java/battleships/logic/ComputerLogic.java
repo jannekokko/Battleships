@@ -12,9 +12,9 @@ import java.util.Random;
  * @author Janne
  */
 public class ComputerLogic {
-    private int maxCycles;
-    private int maxNeighborChecks;
-    private double randomShotChance;
+    private final int maxCycles;
+    private final int maxNeighborChecks;
+    private final double randomShotChance;
     
     public ComputerLogic() {
         this.maxCycles = 10000;
@@ -63,8 +63,8 @@ public class ComputerLogic {
     }
     
     /**
-     * Shoots at random location of enemy grid. This is a backup mechanism
-     * where we should not end up usually.
+     * Shoots at random location of enemy grid. This method is called ramdomly
+     * in order to replicate "human factor" or if smarter logic fails.
      * @param grid  Enemy's grid object
      * @return Result of the shot
      */
@@ -86,6 +86,8 @@ public class ComputerLogic {
                 }
             }
         }
+        // Fail-safe mechanism, if for whatever reason we don't manage to find
+        // a proper target
         if (state == GridState.UNKNOWN) {
             state = shootRandom(grid);
         }

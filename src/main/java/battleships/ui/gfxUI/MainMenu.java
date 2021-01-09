@@ -38,14 +38,14 @@ public class MainMenu implements ContainsView {
         
         createButtons(buttonLayout);
         
-        return (Parent) menuPane;
+        return menuPane;
     }
     
     /**
      * Creates main menu buttons and listeners for them.
      * @param buttonLayout button layout
      */
-    public void createButtons(VBox buttonLayout) {
+    private void createButtons(VBox buttonLayout) {
         Button startButton = new Button("Start game");
         Button playerSelectionButton = new Button("Select player");
         Button statisticsButton = new Button("Statistics");
@@ -69,7 +69,5 @@ public class MainMenu implements ContainsView {
             Platform.exit();
         });
     }
-
-
-    
+  
 }

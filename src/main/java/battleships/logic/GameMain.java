@@ -24,14 +24,15 @@ public class GameMain {
     private String playerName;
     private int computerId;
     
-    public GameMain() {
+    public GameMain(String dbFile) {
         this.logic = new ComputerLogic();
         this.settings = new Settings(6);
         this.result = Result.UNFINISHED;
         try {
-            this.playerDB = new PlayerDatabase();
+            this.playerDB = new PlayerDatabase(dbFile);
         } catch (SQLException e) {
-            System.out.println("Database error!");
+            System.out.println("Error in database connection:");
+            System.out.println(e.getMessage());
         }
         this.playerId = -1;
         this.computerId = -1;
@@ -52,7 +53,7 @@ public class GameMain {
     /**
      * Generates ship setup for the game.
      */
-    public final void initShips() {
+    private final void initShips() {
         settings.addShipType(4, 1);
         settings.addShipType(3, 1);
         settings.addShipType(2, 2);

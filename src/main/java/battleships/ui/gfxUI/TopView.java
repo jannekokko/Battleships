@@ -5,10 +5,8 @@ import battleships.logic.GameMain;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 
@@ -17,11 +15,11 @@ import javafx.scene.layout.StackPane;
  * @author Janne
  */
 public class TopView implements ContainsView {
-    private GridPane topView;
-    private GameMain gameMain;
-    private StackPane left;
-    private StackPane center;
-    private StackPane right;
+    private final GridPane topView;
+    private final GameMain gameMain;
+    private final StackPane left;
+    private final StackPane center;
+    private final StackPane right;
     
     public TopView(int topHeight, GameMain gameMain) {
         this.topView = new GridPane();

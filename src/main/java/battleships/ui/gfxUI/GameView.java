@@ -16,14 +16,14 @@ import javafx.scene.text.FontWeight;
  * @author Janne
  */
 public class GameView implements ContainsView {
-    private GameMain gameMain;
-    private UIDataStore uiData;
+    private final GameMain gameMain;
+    private final UIDataStore uiData;
     private Parent playerGrid;
     private Parent computerGrid;
     private int width;
     private int height;
     private boolean gameInProgress;
-    private TopView topView;
+    private final TopView topView;
     
     public GameView(GameMain gameMain, UIDataStore uiData, TopView topView) {
         this.gameMain = gameMain;

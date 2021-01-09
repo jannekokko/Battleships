@@ -1,10 +1,7 @@
 
 package battleships.logic;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,7 +12,7 @@ public class GameMainTest {
     
     @Before
     public void setUp() {
-        gm = new GameMain();
+        gm = new GameMain("test.db");
         gm.initGame();
     }
 
@@ -32,5 +29,6 @@ public class GameMainTest {
         Grid pg = gm.getPlayerGrid();
         assertNotNull(pg);
     }
+    
     
 }

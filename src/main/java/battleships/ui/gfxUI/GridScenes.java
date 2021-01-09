@@ -17,12 +17,12 @@ import javafx.scene.shape.Rectangle;
  * @author Janne
  */
 public class GridScenes {
-    private GameMain gameMain;
-    private UIDataStore uiData;
+    private final GameMain gameMain;
+    private final UIDataStore uiData;
     private int width;
     private int height;
     private boolean shipsVisible;
-    Grid grid;
+    private Grid grid;
 
     
     public GridScenes(GameMain gameMain, UIDataStore currentView) {
@@ -46,7 +46,7 @@ public class GridScenes {
      * Draws grid base and details of each grid point.
      * @return grid
      */
-    public Parent getGrid() {        
+    private Parent getGrid() {        
         GridPane gp = new GridPane();
         
         int size = grid.getSize();

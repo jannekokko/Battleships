@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class PlayerDatabase {
     
-    Connection db;
+    private Connection db;
     
-    public PlayerDatabase() throws SQLException {
-        db = DriverManager.getConnection("jdbc:sqlite:playerdb.db");
+    public PlayerDatabase(String dbFile) throws SQLException {
+        db = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
         
         prepareDatabase();
     }
@@ -50,11 +50,13 @@ public class PlayerDatabase {
      * @return true if successful, otherwise false
      */
     public boolean addPlayer(String name) {
+        if (name.length() < 3 || name.length() > 20) return false;
         try {
             PreparedStatement p = db.prepareStatement("INSERT INTO Players (name) VALUES (?)");
             p.setString(1, name);
             p.executeUpdate();
         } catch (SQLException e) {
+            showException(e, "Error adding player:");
             return false;
         }
         return true;
@@ -71,6 +73,7 @@ public class PlayerDatabase {
             p.setString(1, name);
             p.executeUpdate();
         } catch (SQLException e) {
+            showException(e, "Error in deleting player:");
             return false;
         }
         return true;
@@ -87,7 +90,7 @@ public class PlayerDatabase {
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println("Error reading database!");
+            showException(e);
         }
         return false;
     }
@@ -102,7 +105,7 @@ public class PlayerDatabase {
             p.setInt(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Player not found.");
+            showException(e,"Adding win failed:");
         }
     }
     
@@ -112,7 +115,7 @@ public class PlayerDatabase {
             p.setInt(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Player not found.");
+            showException(e,"Adding loss failed:");
         }
     }
     
@@ -126,7 +129,7 @@ public class PlayerDatabase {
             p.setInt(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Player not found.");
+            showException(e,"Adding draw failed:");
         }
     }
     
@@ -147,7 +150,7 @@ public class PlayerDatabase {
                 name = r.getString("name");
             }
         } catch (SQLException e) {
-            System.out.println("Error reading database!");
+            showException(e);
         }
         return name;
     }
@@ -164,7 +167,7 @@ public class PlayerDatabase {
                 id = r.getInt("id");
             }
         } catch (SQLException e) {
-            System.out.println("Error reading database!");
+            showException(e);
         }
         return id;
     }
@@ -189,7 +192,7 @@ public class PlayerDatabase {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error reading database!");
+            showException(e);
         }
         return players;
     }
@@ -210,9 +213,19 @@ public class PlayerDatabase {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error reading database!");
+            showException(e);
         }
         
         return names;
     }
+    
+    private void showException(Exception e) {
+        showException(e, "Database error:");
+    }
+    
+    private void showException(Exception e, String s) {
+        System.out.println(s);
+        System.out.println(e.getMessage());
+    }
+    
 }

@@ -16,10 +16,9 @@ import javafx.scene.Parent;
  * @author Janne
  */
 public class UIDataStore {
-    private SimpleIntegerProperty view;
-    private Parent topTexts;
-    private int gridHeight;
-    private int gridWidth;
+    private final SimpleIntegerProperty view;
+    private final int gridHeight;
+    private final int gridWidth;
     
     public UIDataStore(int gridWidth, int gridHeight) {
         this.view = new SimpleIntegerProperty(Views.MAINMENU.ordinal());

@@ -1,10 +1,7 @@
 package battleships.ui.gfxUI;
 
 import battleships.logic.*;
-import java.sql.SQLException;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -25,12 +22,10 @@ public class GfxUI extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle("Battleships");
-        this.gameMain = new GameMain();
+        this.gameMain = new GameMain("playerdb.db");
 
         SceneControl control = new SceneControl(stage, gameMain);
         control.start();
     }
-    
-    
-    
+
 }

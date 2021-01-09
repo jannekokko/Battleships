@@ -9,7 +9,7 @@ package battleships.logic;
  */
 public class Ship {
     
-    private int length;
+    private final int length;
     private int hits;
     
     public Ship(int length) {

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Grid {
     
     private GridPoint[][] gridMap;
-    private int size;
+    private final int size;
     private int unknownPoints;
     
     public Grid(int size) {
@@ -30,7 +30,6 @@ public class Grid {
                 gridMap[i][j] = new GridPoint();
             }
         }
-        
         this.unknownPoints = size * size;
     }
     
@@ -49,13 +48,11 @@ public class Grid {
         else ydir = 1;
         
         if(x < 0 || y < 0 || x+xdir*(length-1) >= size || y+ydir*(length-1) >= size) {
-//            System.out.println("out of bounds error");
             return false;
         }
         
         for (int i = 0; i < length; i++) {
             if (shipNear(x+i*xdir,y+i*ydir)) {
-//                System.out.println("other ship too near");
                 return false;
             }
         }
@@ -149,6 +146,12 @@ public class Grid {
         return gridMap;
     }
     
+    /**
+     * Simple getter for GridState with an out-of-bounds check.
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return Gridstate of the given coordinates. Returns UNKNOWN for out-of-bounds request
+     */
     public GridState getGridState(int x, int y) {
         if (x < 0 || x >= size || y < 0 || y >= size) return GridState.UNKNOWN;
         return gridMap[x][y].getState();

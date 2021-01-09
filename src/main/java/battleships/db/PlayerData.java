@@ -5,13 +5,13 @@ package battleships.db;
  * @author Janne
  */
 public class PlayerData {
-    private int id;
-    private String name;
-    private int wins;
-    private int losses;
-    private int draws;
-    private boolean irremovable;
-    private boolean computer;
+    private final int id;
+    private final String name;
+    private final int wins;
+    private final int losses;
+    private final int draws;
+    private final boolean irremovable;
+    private final boolean computer;
     
     public PlayerData(int id, String name, int wins, int losses, int draws, boolean irremovable, boolean computer) {
         this.id = id;

@@ -24,11 +24,11 @@ import javafx.scene.layout.VBox;
  * @author Janne
  */
 public class PlayerSelectionView implements ContainsView {
-private GameMain gameMain;
-private UIDataStore uiData;
-private TopView topView;
+private final GameMain gameMain;
+private final UIDataStore uiData;
+private final TopView topView;
 private String selectedName;
-private ObservableList<String> names;
+private final ObservableList<String> names;
     
     public PlayerSelectionView(GameMain gameMain, UIDataStore uiData, TopView topView) {
         this.gameMain = gameMain;
@@ -63,7 +63,7 @@ private ObservableList<String> names;
                 updateNameList();
                 setPlayer(nameField.getText());
             } else {
-                addFeedback.setText("Adding name failed!");
+                addFeedback.setText("Adding name failed! Name must be unique and be 3-20 characters long");
             }
         });
         nameCreation.getChildren().addAll(nameField, addNameButton, addFeedback);
@@ -87,7 +87,7 @@ private ObservableList<String> names;
         
         placement.setCenter(midPane);
         
-        return (Parent) placement;
+        return placement;
     }
     
     private void updateNameList() {

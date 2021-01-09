@@ -3,7 +3,6 @@ package battleships.ui.gfxUI;
 import battleships.db.PlayerData;
 import battleships.logic.GameMain;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
@@ -17,18 +16,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * @author Janne
  */
 public class StatisticsView implements ContainsView {
-    private GameMain gameMain;
-    private UIDataStore uiData;
-    private TopView topView;
-    
-    private static int nameWidth = 300;
-    private static int numberWidth = 80;
+    private final GameMain gameMain;
+    private final UIDataStore uiData;
+    private final TopView topView; 
+    private final int nameWidth;
+    private final int numberWidth;
     
     
     public StatisticsView(GameMain gameMain, UIDataStore uiData, TopView topView) {
         this.gameMain = gameMain;
         this.uiData = uiData;
         this.topView = topView;
+        nameWidth = 300;
+        numberWidth = 80;
     }
     
     /**
